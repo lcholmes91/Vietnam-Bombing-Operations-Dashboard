@@ -1,0 +1,16 @@
+# The requirements.txt file lists all the Python packages needed to run the app.
+# Each line specifies a package and optionally its version.
+
+streamlit
+polars[sqlalchemy]
+pandas
+altair
+openai
+SQLAlchemy
+connectorx
+tabulate
+pydeck
+
+# The runtime.txt file tells the Streamlit Community Cloud which version
+# of Python to use when it spins up our app. Streamlit installs this version,
+# creates a virtual environment, and then installs the packages from requirements.txt.
