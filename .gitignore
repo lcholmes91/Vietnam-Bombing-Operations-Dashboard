@@ -1,0 +1,9 @@
+# Ignore all SQLite databases
+data/*.db
+
+# Ignore the Operations CSV with all our data - there are two other CSVs that have reference
+# data a user may want
+data/THOR_Vietnam_Bombing_Operations.csv
+
+# Ignore the secrets.toml which contains the NVIDIA gpt-oss-20b API key
+.streamlit/secrets.toml
