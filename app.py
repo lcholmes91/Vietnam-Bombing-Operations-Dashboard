@@ -22,8 +22,8 @@ import pydeck as pdk
 
 # Create a database locally if one doesn't already exist - the dashboard will need one to reference
 # locally (if running locally) or in the cloud (if running in the cloud) where it will host the dashboard
-DB_PATH = "data/vietnam.db"                                     # Path to the SQLite DB file
-PARQUET_PATH = "data/THOR_Vietnam_Bombing_Operations.parquet"   # Path to the source .parquet file
+DB_PATH = "Data/vietnam.db"                                     # Path to the SQLite DB file
+PARQUET_PATH = "Data/THOR_Vietnam_Bombing_Operations.parquet"   # Path to the source .parquet file
 
 # Every time we run a query, we want to make sure the DB exists first.
 # If it doesn't, we create it from the .parquet file. The DB is created
