@@ -22,23 +22,48 @@ import pydeck as pdk
 
 # Create a database locally if one doesn't already exist - the dashboard will need one to reference
 # locally (if running locally) or in the cloud (if running in the cloud) where it will host the dashboard
-DB_PATH = "Data/vietnam.db"                                     # Path to the SQLite DB file
+#DB_PATH = "Data/vietnam.db"                                     # Path to the SQLite DB file
 PARQUET_PATH = "Data/THOR_Vietnam_Bombing_Operations.parquet"   # Path to the source .parquet file
+
+@st.cache_data      # Caches function outputs that depend on inputs (i.e. results of SQL queries)
+def load_data(yr_start: int, yr_end: int) -> pl.DataFrame:
+    """Load data from Parquet file and filter by year range.
+    --------------------------------------
+    Args:
+        yr_start (int): Start year for filtering
+        yr_end (int): End year for filtering
+    --------------------------------------
+    Returns:
+        pl.DataFrame: Filtered Polars DataFrame
+    """    
+    df = pl.read_parquet(PARQUET_PATH)                              # Read in the .parquet w/ Polars
+    df = (df.filter(
+        pl.col("MSNDATE").dt.year().is_between(yr_start, yr_end)).select(
+            ["MSNDATE", 
+             "TGTLATDD_DDD_WGS84", 
+             "TGTLONDDD_DDD_WGS84", 
+             "NUMWEAPONSDELIVERED", 
+             "VALID_AIRCRAFT_ROOT", 
+             "MFUNC_DESC", 
+             "MILSERVICE"]))
+    return df
+
+
 
 # Every time we run a query, we want to make sure the DB exists first.
 # If it doesn't, we create it from the .parquet file. The DB is created
 # on the user's disc, and because we've listed all .db files in .gitignore,
 # it won't be committed to the GitLab repo.
-def ensure_db():
-    """Creates an SQLite DB from .parquet file if it doesn't exist yet."""       
+#def ensure_db():
+#    """Creates an SQLite DB from .parquet file if it doesn't exist yet."""       
     
-    if os.path.exists(DB_PATH):                                     # If the DB already exists
-        return                                                      # Do nothing
+#    if os.path.exists(DB_PATH):                                     # If the DB already exists
+#        return                                                      # Do nothing
     
-    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)            # Make sure the data directory exists
+#    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)            # Make sure the data directory exists
 
-    print("Building SQLite database from Parquet (first run only)...")
-    df = pl.read_parquet(PARQUET_PATH)                              # Read in the .parquet w/ Polars
+#    print("Building SQLite database from Parquet (first run only)...")
+#    df = pl.read_parquet(PARQUET_PATH)                              # Read in the .parquet w/ Polars
 
     # Build SQLite connection Uniform Resource Identifier (URI); in DB operations,
     # this is a string that describes how to connect to a DB. Libraries like SQLAlchemy 
@@ -47,38 +72,38 @@ def ensure_db():
     # sqlite = which DB driver/type to use
     # :///   = part of the URI syntax, meaning "use a local file"
     # os.path... = the DB file path
-    db_uri = "sqlite:///" + os.path.abspath(DB_PATH)    # Absolute path to vietnam.db
+#    db_uri = "sqlite:///" + os.path.abspath(DB_PATH)    # Absolute path to vietnam.db
 
     # Write Polars DataFrame to SQLite in one go
-    df.write_database(              # Polars version of to_sql()
-        table_name = "missions",    # Create a new table
-        connection = db_uri,        # Open the connection; since we're using URI, we don't manually connect
-        if_table_exists="replace",  # Replace existing tables
-        engine = "sqlalchemy"       # Default 
-    )
-    return
+#    df.write_database(              # Polars version of to_sql()
+#        table_name = "missions",    # Create a new table
+#        connection = db_uri,        # Open the connection; since we're using URI, we don't manually connect
+#        if_table_exists="replace",  # Replace existing tables
+#        engine = "sqlalchemy"       # Default 
+#    )
+#    return
+
 
 # @st.cache_... is what's known as a Streamlit "caching decoration", which is used to avoid 
 # doing expensive work over & over when the app re-runs.
-@st.cache_resource  # Caches long-lived objects that you want to create once and reuse (i.e. DB connections)
-def get_db_uri():
-    """Creates an SQLite DB (on first run if needed) & establishes 
-       a connection to that DB
-    --------------------------------------
-    Returns:
-        URI string to the Vietnam DB
-    """
-    ensure_db()                                     # Calls our DB helper function
-    return "sqlite:///" + os.path.abspath(DB_PATH)  # Return the URI string = "this is an SQLite DB & its file path"
+#@st.cache_resource  # Caches long-lived objects that you want to create once and reuse (i.e. DB connections)
+#def get_db_uri():
+#    """Creates an SQLite DB (on first run if needed) & establishes 
+#       a connection to that DB
+#    --------------------------------------
+#    Returns:
+#        URI string to the Vietnam DB
+#    """
+#    ensure_db()                                     # Calls our DB helper function
+#    return "sqlite:///" + os.path.abspath(DB_PATH)  # Return the URI string = "this is an SQLite DB & its file path"
 
-@st.cache_data      # Caches function outputs that depend on inputs (i.e. results of SQL queries)
-def run_query(sql: str):
-    uri = get_db_uri()                              # Get the DB URI
-    return pl.read_database_uri(                    # Return a Polars DF from the DB using...,
-        query=sql,                                  # ...the SQL query from our sidebar filters, 
-        uri=uri,                                    # using the DB URI we just got
-    )                                               # Note this is using a SQLAlchemy engine under the hood
-
+#@st.cache_data      # Caches function outputs that depend on inputs (i.e. results of SQL queries)
+#def run_query(sql: str):
+#    uri = get_db_uri()                              # Get the DB URI
+#    return pl.read_database_uri(                    # Return a Polars DF from the DB using...,
+#        query=sql,                                  # ...the SQL query from our sidebar filters, 
+#        uri=uri,                                    # using the DB URI we just got
+#    )                                               # Note this is using a SQLAlchemy engine under the hood
 
 # --------------------------------------
 # LLM HELPER FUNCTIONS
@@ -222,25 +247,29 @@ yr_end   = st.sidebar.number_input(     # End year filter
 # --------------------------------------
 # SQL QUERY
 # --------------------------------------
-query = f"""
-SELECT MSNDATE, TGTLATDD_DDD_WGS84, TGTLONDDD_DDD_WGS84, NUMWEAPONSDELIVERED, VALID_AIRCRAFT_ROOT, MFUNC_DESC, MILSERVICE
-FROM missions
-"""
+#query = f"""
+#SELECT MSNDATE, TGTLATDD_DDD_WGS84, TGTLONDDD_DDD_WGS84, NUMWEAPONSDELIVERED, VALID_AIRCRAFT_ROOT, MFUNC_DESC, MILSERVICE
+#FROM missions
+#"""
 
 # Run the sql query - this'll create the DB if it's the first run
-df = run_query(sql=query)
+#df = run_query(sql=query)
+
 
 # The DB read-in of our query produces strings, so we'll need to 
 # re-convert MSNDATE to a Datetime object
-df = df.with_columns(
-    pl.col("MSNDATE").str.strptime(pl.Datetime, strict=False)
-)
+#df = df.with_columns(
+#    pl.col("MSNDATE").str.strptime(pl.Datetime, strict=False)
+#)
 
 # Filter by year range from sidebar
-df = df.filter(
-    pl.col("MSNDATE").dt.year().is_between(yr_start, yr_end)
-)
+#df = df.filter(
+#    pl.col("MSNDATE").dt.year().is_between(yr_start, yr_end)
+#)
 
+# All the above query and filtering is now handled in load_data() b/c we switched to Parquet
+# instead of SQLite for simplicity.
+df = load_data(yr_start, yr_end)  # Load & filter data from Parquet file
 
 # --------------------------------------
 # AIRCRAFT MULTISELECT
