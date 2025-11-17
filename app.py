@@ -37,6 +37,10 @@ def load_data(yr_start: int, yr_end: int) -> pl.DataFrame:
         pl.DataFrame: Filtered Polars DataFrame
     """    
     df = pl.read_parquet(PARQUET_PATH)                              # Read in the .parquet w/ Polars
+
+    # Convert MSNDATE to Datetime
+    df = df.with_columns(pl.col("MSNDATE").str.strptime(pl.Datetime, strict=False))
+
     df = (df.filter(
         pl.col("MSNDATE").dt.year().is_between(yr_start, yr_end)).select(
             ["MSNDATE", 
