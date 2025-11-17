@@ -21,7 +21,8 @@ import pydeck as pdk
 # --------------------------------------
 
 st.set_page_config(         # Streamlit page configuration
-    page_title="Vietnam War Aerial Bombing Dashboard",  # Page title
+    page_title="Vietnam War Aerial Bombing Dashboard",  # Page title - this is the browser tab title
+    page_icon="✈️",         # Page icon - shows in the browser tab
     layout="wide"           # Use wide layout
 )
 # Create a database locally if one doesn't already exist - the dashboard will need one to reference
@@ -235,8 +236,9 @@ def run_llm(user_msg: str, df: pl.DataFrame, history: list):
 # --------------------------------------
 # TITLE & YEAR FILTER
 # --------------------------------------
-
-st.title("Vietnam War Aerial Bombing")  # Dashboard title
+col1, col2, col3 = st.columns([1,6,1])  # Create 3 columns for centering the title
+with col2:
+    st.title("Vietnam War Aerial Bombing")  # Dashboard title
 
 # Filter sidebar settings
 st.sidebar.header("Filters")            # Sidebar header for filters
