@@ -2,4 +2,4 @@
 base="dark"
 
 [server]
-headless=true
+maxUploadSize = 400
