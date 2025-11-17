@@ -20,6 +20,10 @@ import pydeck as pdk
 # DATABASE FUNCTIONS
 # --------------------------------------
 
+st.set_page_config(         # Streamlit page configuration
+    page_title="Vietnam War Aerial Bombing Dashboard",  # Page title
+    layout="wide"           # Use wide layout
+)
 # Create a database locally if one doesn't already exist - the dashboard will need one to reference
 # locally (if running locally) or in the cloud (if running in the cloud) where it will host the dashboard
 #DB_PATH = "Data/vietnam.db"                                     # Path to the SQLite DB file
