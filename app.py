@@ -236,7 +236,7 @@ def run_llm(user_msg: str, df: pl.DataFrame, history: list):
 # --------------------------------------
 # TITLE & YEAR FILTER
 # --------------------------------------
-col1, col2, col3 = st.columns([1,6,1])  # Create 3 columns for centering the title
+col1, col2, col3 = st.columns(3)  # Create 3 columns for centering the title
 with col2:
     st.title("Vietnam War Aerial Bombing")  # Dashboard title
 
