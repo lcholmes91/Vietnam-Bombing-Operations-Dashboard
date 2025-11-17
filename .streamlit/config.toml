@@ -2,4 +2,4 @@
 base="dark"
 
 [server]
-maxUploadSize = 400
+maxUploadSize = 500
