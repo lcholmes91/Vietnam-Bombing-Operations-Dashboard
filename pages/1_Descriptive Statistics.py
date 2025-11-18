@@ -259,7 +259,7 @@ yr_end   = st.sidebar.number_input(     # End year filter
     label="End Year",                   # Input label
     min_value=1964,                     # Minimum year
     max_value=1973,                     # Maximum year
-    value=1968)                         # Default value
+    value=1967)                         # Default value
 
 
 # --------------------------------------
