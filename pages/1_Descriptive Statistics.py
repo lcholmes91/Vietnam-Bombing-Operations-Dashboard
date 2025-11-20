@@ -307,7 +307,7 @@ aircraft_options = (
 selected_aircraft = st.sidebar.multiselect(     # Multiselect widget in sidebar
     "Aircraft (optional)",                      # Input label
     options=aircraft_options,                   # Options from the unique aircraft types
-    default=[]                                  # Default = none selected
+    default=["F-4"]                                  # Default = none selected
 )
 
 if selected_aircraft:                           # If the user selected any aircraft types
