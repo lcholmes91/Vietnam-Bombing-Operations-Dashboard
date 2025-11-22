@@ -1,7 +1,7 @@
 # Luke Holmes
 # This script is what streamlit will read to build a dashboard of our visualizations.
-# I used ChatGPT-5.1 to learn about how to build dashboards with Streamlit, Polars, etc.,
-# and how to connect it to an SQLite database. I also used the NVIDIA LLM API docs to learn how to
+# I used ChatGPT-5.1 and Copilot to learn about how to build dashboards with Streamlit, Polars, etc.,
+# and how to connect it to a publically hosted LLM. I also used the NVIDIA LLM API docs to learn how to
 # connect to their hosted models. I'll narrate the code with comments to explain each section.
 
 # All these dependencies need to be in the requirements.txt file for deployment
