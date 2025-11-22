@@ -35,7 +35,16 @@ df_parquet = pl.read_parquet("Data/THOR_Vietnam_Bombing_Operations.parquet")
    - Click on the "Download" button to download the dataset as a ZIP file.
    - Extract the contents of the ZIP file to access the *THOR_Vietnam_Bombing_Operations.csv* file.
 
-## How to Run the Streamlit Dashboard
+## How to Use the Dashboard
+The dashboard consists of two main pages:
+
+1. **Introduction Page**: This page provides an overview of the Vietnam War bombing operations dataset.
+
+2. **Descriptive Statistics Page**: This page offers various visualizations and statistics about the bombing operations, including trends over time, geographical distribution, and types of munitions used.
+
+Users can interact with the visualizations by selecting different filters and options available in the sidebar. Additionally, LLM chatbot interface allows users to ask questions about the currently filtered dataset or the conflict in general.
+
+## How to Run the Streamlit Dashboard Locally
 To run the Streamlit dashboard locally, follow these steps:
 1. Clone this repository to your local machine using the command:
    ```bash
@@ -56,16 +65,7 @@ Under the hood, Streamlit will launch a local web client to host the dashboard, 
 
 The dashboard should open in your default web browser. If it does not, you can access it by navigating to http://localhost:8501 in your web browser.
 
-To set up the LLM chatbot interface for your local dashboard, you will need to register for an LLM API key. I used NVIDIA's [Qwen3-Next-80B-A3B-Instruct](https://build.nvidia.com/qwen/qwen3-next-80b-a3b-instruct/modelcard) model, which is what you'll interact with if you open the [cloud-hosted dashboard](https://vietnam-bombing-operations-dashboard-djaxjt64vgos7rfgxtnhm4.streamlit.app/) I've set up. The [NVIDIA build](https://build.nvidia.com/) platform hosts various other LLMs to choose from. Once you have registered for your LLM's API key, fill in the API and model information into the provided .streamlit/secrets.toml.example file, and rename it to .streamlit/secrets.toml. The chatbot interface will then be functional within the dashboard. You can alter the system and user prompts in the Intro.py and 1_Descriptive_Statistics.py files to customize the chatbot's behavior. 
-
-## How to Use the Dashboard
-The dashboard consists of two main pages:
-
-1. **Introduction Page**: This page provides an overview of the Vietnam War bombing operations dataset.
-
-2. **Descriptive Statistics Page**: This page offers various visualizations and statistics about the bombing operations, including trends over time, geographical distribution, and types of munitions used.
-
-Users can interact with the visualizations by selecting different filters and options available on the dashboard. Additionally, there is an LLM chatbot interface that allows users to ask questions about the dataset.
+To set up the LLM chatbot interface for your local dashboard, you will need to register for an LLM API key. I used NVIDIA's [Qwen3-Next-80B-A3B-Instruct](https://build.nvidia.com/qwen/qwen3-next-80b-a3b-instruct/modelcard) model, which is what you'll interact with if you open the [cloud-hosted dashboard](https://vietnam-bombing-operations-dashboard-djaxjt64vgos7rfgxtnhm4.streamlit.app/) I've set up. The [NVIDIA build](https://build.nvidia.com/) platform hosts various other LLMs to choose from. Once you've registered for your LLM's API key, fill in the API and model information into the provided .streamlit/secrets.toml.example file, and rename it to .streamlit/secrets.toml. The chatbot interface will then be functional within the dashboard. You can alter the system and user prompts in the Intro.py and 1_Descriptive_Statistics.py files to customize the chatbot's behavior. 
 
 ## Acknowledgements
 This project was completed as part of coursework for the Naval Postgraduate School's Operations Research curriculum. Various online resources were referenced for this project, including the [THOR dataset](https://www.kaggle.com/datasets/usaf/vietnam-war-bombing-operations?select=THOR_Vietnam_Bombing_Operations.csv) on Vietnam War bombing operations, the [Streamlit documentation](https://docs.streamlit.io/) for dashboard visualization techniques, and [NVIDIA's build platform](https://build.nvidia.com/) for LLM model descriptions and recommended usage. I would like to acknowledge the significant contributions of Sean Pinzini and Kyle Ward for their collaborative assistance in data acquisition and analysis on this project. ChatGPT-5.1 and Microsoft Copilot were used to assist with code generation and debugging; any errors are my own.
